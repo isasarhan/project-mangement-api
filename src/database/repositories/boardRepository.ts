@@ -12,11 +12,11 @@ class BoardRepository {
     return Board.findById(id).populate('lists').populate('users')
   }
 
-  async getAll(): Promise<IBoard[]> {
+  async getAll() {
     return Board.find().populate('lists').populate('users')
   }
 
-  async update(id: string, data: Partial<Omit<IBoard, '_id'>>) {
+  async update(id: string, data: Partial<IBoard>) {
     return Board.findByIdAndUpdate(id, { $set: data }, { new: true }).populate('lists').populate('users')
   }
 

@@ -21,7 +21,7 @@ export class Card {
 
   @Field(() => [User])
   members?: User[];
-
+ 
   @Field(() => String)
   description?: string;
 

@@ -1,12 +1,13 @@
 import { ObjectType, Field, ID, Int, ArgsType } from 'type-graphql';
 import { ICustomer } from '../../interfaces/index.js';
-import { IsMongoId } from 'class-validator';
+import { IsMongoId, Length } from 'class-validator';
 
 @ObjectType()
 export class Customer implements ICustomer {
   @Field(() => ID)
   _id?: string;
 
+  @Length(3)
   @Field(() => String)
   name!: string;
 

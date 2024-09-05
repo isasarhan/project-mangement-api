@@ -30,7 +30,7 @@ export class AddBoardArgs{
     title!: string;
 
     @Field(() => [List])
-    lists?: List[]
+    lists?: string[]
 
     @Field(() => [String])
     users?: string[]
@@ -46,7 +46,7 @@ export class EditBoardArgs{
     _id!: string
 
     @Field(() => String)
-    title?: string;
+    title!: string;
 
     @Field(() => [List])
     lists?: string[]
@@ -66,4 +66,4 @@ export class GetBoardArgs{
 }
 
 @ArgsType()
-export class DeleteArgs extends GetBoardArgs{}
+export class DeleteBoardArgs extends GetBoardArgs{}

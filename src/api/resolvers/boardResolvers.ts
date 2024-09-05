@@ -1,43 +1,36 @@
 import { GraphQLError } from 'graphql';
 import { BoardService } from '../../services/boardService.js'; // Adjust the path as needed
-import { Args, Query, Resolver } from 'type-graphql';
+import { Args, Mutation, Query, Resolver } from 'type-graphql';
 import { Service } from 'typedi';
-import { GetBoardArgs } from '../typedefs/boardTypeDefs.js';
+import { AddBoardArgs, Board, DeleteBoardArgs, EditBoardArgs, GetBoardArgs } from '../typedefs/boardTypeDefs.js';
 
 @Service()
 @Resolver()
 export class BoardResolvers {
-  constructor(private readonly service: BoardService){}
+  constructor(private readonly service: BoardService) { }
 
-
-  @Query()
+  @Query(() => Board)
   async getBoardById(@Args() { _id }: GetBoardArgs) {
     return await this.service.getBoardById(_id);
   }
+
+  @Query(() => Board)
+  async getAllBoards() {
+    return await this.service.getAllBoards();
+  }
+
+  @Mutation(() => Board)
+  async createBoard(@Args() data: AddBoardArgs) {
+    return await this.service.createBoard(data);
+  }
+  @Mutation(() => Board)
+  async updateBoard(_: any, data: EditBoardArgs) {
+    const { _id, ...rest } = data
+    return await this.service.updateBoard(_id, rest);
+  }
+  @Mutation(() => Board)
+  async deleteBoard(_: any, { _id }: DeleteBoardArgs) {
+    return await this.service.deleteBoard(_id);
+  }
+
 }
-// const boardResolvers = {
-//   Query: {
-    
-
-//     async getAllBoards(): Promise<IBoard  []> {
-//       return await service.getAllBoards();
-//     },
-//   },
-
-//   Mutation: {
-//     async createBoard(_: any, { title, lists, users }: IBoard) {
-//       return await service.createBoard({ title, lists, users });
-//     },
-
-//     async updateBoard(_: any, { id, title, lists, users }: any): Promise<IBoard | null> {
-//       return await service.updateBoard(id, { title, lists, users });
-//     },
-
-//     async deleteBoard(_: any, { id }: { id: string }): Promise<IBoard | null> {
-//       return await service.deleteBoard(id);
-//     },
-//   },
-
-// };
-
-// export default boardResolvers;

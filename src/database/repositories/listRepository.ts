@@ -1,6 +1,6 @@
 import { Model, Document, Types } from 'mongoose';
 import List from '../models/List.js';
-import { IList } from '../../interfaces/IList.js';
+import { IList } from '../../interfaces/index.js';
 
 class ListRepository {
 
