@@ -1,0 +1,5 @@
+export const UNAUTHORIZED = 'unauthorized' 
+export const SERVER_ERROR = 'unexpected error'
+export const CUSTOMER_NOT_FOUND = 'customer not found'
+export const USER_NOT_FOUND = 'user not found'
+export const USER_UPDATE_ERROR = 'error updating user'

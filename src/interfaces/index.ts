@@ -46,7 +46,7 @@ export interface IList {
 }
 export interface ICustomer {
   name: string;
-  location?: string;
+  residence?: string;
   number?: string;
   description?: string;
 }

@@ -1,6 +1,7 @@
 import { ObjectType, Field, ID, Int, ArgsType } from 'type-graphql';
 import { ICustomer } from '../../interfaces/index.js';
 import { IsMongoId, Length } from 'class-validator';
+import { User } from './userTypeDefs.js';
 
 @ObjectType()
 export class Customer implements ICustomer {
@@ -12,13 +13,16 @@ export class Customer implements ICustomer {
   name!: string;
 
   @Field({ nullable: true })
-  location?: string;
+  residence?: string;
 
   @Field({ nullable: true })
   number?: string;
 
   @Field({ nullable: true })
   description?: string;
+
+  @Field(() => User)
+  user?: User
 }
 
 @ArgsType()
@@ -27,13 +31,19 @@ export class AddCustomerArgs {
   name!: string;
 
   @Field({ nullable: true })
-  location?: string;
+  residence?: string;
 
   @Field({ nullable: true })
   number?: string;
-
+ 
   @Field({ nullable: true })
   description?: string;
+
+  @Field(() => ID, { nullable: false })
+  @IsMongoId()
+  user!: string
+
+  
 }
 
 @ArgsType()
@@ -46,7 +56,7 @@ export class EditCustomerArgs {
   name!: string;
 
   @Field({ nullable: true })
-  location?: string;
+  residence?: string;
 
   @Field({ nullable: true })
   number?: string;

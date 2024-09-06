@@ -2,6 +2,9 @@ import { GraphQLError } from "graphql"
 import { userRepository } from "../database/repositories/index.js"
 import { IUser } from "../interfaces/index.js"
 import { Service } from "typedi"
+import { generateJwtToken } from "../utilities/jwtUtilities.js"
+import { AppError, ErrorCodes, isAppError } from "../utilities/appError.js"
+import { SERVER_ERROR, USER_NOT_FOUND, USER_UPDATE_ERROR } from "../utilities/messages.js"
 
 @Service()
 export class UserService {
@@ -11,8 +14,12 @@ export class UserService {
         this.repository = userRepository
     }
 
-    async createUser(data: IUser) {
+    async createUser(data: IUser): Promise<IUser> {
         try {
+            const { email } = data
+            const user = await this.repository.getByEmail(email)
+            if (user)
+                throw new GraphQLError("User already Exists")
             return await this.repository.create(data)
         } catch (error) {
             throw new GraphQLError("Error Creating User", {
@@ -23,23 +30,35 @@ export class UserService {
             })
         }
     }
+    async signIn(data: IUser) {
+        try {
+            const { email, password } = data
+            const user = await this.repository.getByEmail(email)
+            if (!user || !(await user.matchPassword(password)))
+                throw new AppError({ message: USER_NOT_FOUND, code: ErrorCodes.NOT_FOUND, })
+        
+            return { user: user, token: generateJwtToken(user?._id, user?.email) }
+        } catch (error: any) {
+            isAppError(error)
+            throw new AppError({
+                message: SERVER_ERROR,
+                code: ErrorCodes.INTERNAL_SERVER_ERROR,
+                originalError: error,
+                extensions: { originalError: error },
+            });
+        }
+    }
     async updateUser(id: string, data: Partial<IUser>) {
         try {
             const updated = await this.repository.update(id, data)
-            if (!updated) throw new GraphQLError("User Not Found", {
-                extensions: {
-                    code: 'INTERNAL_SERVER_ERROR',
-                }
-            })
+
+            if (!updated)
+                throw new AppError({ message: USER_NOT_FOUND, code: ErrorCodes.NOT_FOUND })
+
             return updated
         } catch (error) {
-            if (error instanceof GraphQLError) throw error
-            throw new GraphQLError("Error Updating User", {
-                extensions: {
-                    code: 'INTERNAL_SERVER_ERROR',
-                    exception: error,
-                }
-            })
+            isAppError(error)
+            throw new AppError({ message: USER_UPDATE_ERROR, code: ErrorCodes.INTERNAL_SERVER_ERROR })
         }
     }
 
@@ -95,3 +114,4 @@ export class UserService {
         }
     }
 }
+

@@ -1,7 +1,8 @@
 import { Service } from 'typedi';
 import { UserService } from '../../services/userService.js';
-import { Args, Mutation, Query, Resolver } from 'type-graphql';
-import { AddUserArgs, DeleteUserArgs, EditUserArgs, GetUserArgs, User } from '../typedefs/userTypeDefs.js';
+import { Args, Ctx, Mutation, Query, Resolver } from 'type-graphql';
+import { AddUserArgs, DeleteUserArgs, EditUserArgs, GetUserArgs, LoginUser, LoginUserArgs, User } from '../typedefs/userTypeDefs.js';
+import { authCheck, MyContext } from '../../app.js';
 
 @Service()
 @Resolver(() => User)
@@ -14,12 +15,18 @@ export class UserResolver {
     }
 
     @Query(() => [User])
-    async getAllUsers() {
+    async getAllUsers(@Ctx() ctx: MyContext) {
+        authCheck(ctx)
         return await this.service.getAllUsers()
     }
 
+    @Query(() => LoginUser)
+    async signIn(@Args() data: LoginUserArgs) {
+        return await this.service.signIn(data)
+    }
+
     @Mutation(() => User)
-    async createUser(@Args() data: AddUserArgs) {
+    async register(@Args() data: AddUserArgs) {
         return await this.service.createUser(data)
     }
 

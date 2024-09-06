@@ -7,7 +7,7 @@ import { ICustomer } from "../interfaces/index.js";
 @Service()
 export class CustomerService {
     private repository
-
+ 
     constructor() {
         this.repository = customerRepository;
     }
@@ -15,7 +15,9 @@ export class CustomerService {
     async createCustomer(data: ICustomer) {
         try {
             return await this.repository.create(data)
-        } catch (error) {
+        } catch (error) { 
+            console.error(error);
+            
             throw new GraphQLError("Error Creating Customer", {
                 extensions: {
                     code: 'INTERNAL_SERVER_ERROR',

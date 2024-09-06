@@ -19,5 +19,5 @@ const CardSchema = new Schema<ICard>({
     createdAt: { type: Date, default: Date.now }
 });
 
-const CardModel = model('Card', CardSchema);
+const CardModel = model<ICard>('Card', CardSchema);
 export default CardModel;

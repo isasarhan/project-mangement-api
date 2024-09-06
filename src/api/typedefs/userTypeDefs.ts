@@ -1,9 +1,10 @@
 import { ObjectType, Field, ID, ArgsType, GraphQLISODateTime } from 'type-graphql';
 import { IsMongoId } from 'class-validator';
-import { IUser } from '../../interfaces/index.js';
+import { Customer } from './customerTypeDefs.js';
+
 
 @ObjectType()
-export class User implements IUser {
+export class User {
   @Field(() => ID)
   _id!: string;
 
@@ -18,8 +19,18 @@ export class User implements IUser {
 
   @Field(() => GraphQLISODateTime, { nullable: true })
   createdAt?: Date;
-}
 
+  @Field(() => [Customer])
+  customers?: Customer[]
+}
+@ObjectType()
+export class LoginUser {
+  @Field()
+  user!: User
+
+  @Field(() => String)
+  token!: string;
+}
 @ArgsType()
 export class EditUserArgs {
   @Field(() => ID)
@@ -46,11 +57,16 @@ export class AddUserArgs {
   @Field(() => String)
   username!: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   password!: string;
 
   @Field(() => GraphQLISODateTime, { nullable: true }) // Updated type
   createdAt?: Date;
+
+  @Field(() => [ID])
+  @IsMongoId()
+  customers?: [string]
+
 }
 
 @ArgsType()
@@ -58,6 +74,18 @@ export class GetUserArgs {
   @Field(() => ID)
   @IsMongoId()
   _id!: string;
+}
+@ArgsType()
+export class LoginUserArgs {
+  @Field(() => String)
+  email!: string;
+
+  @Field(() => String, { nullable: true })
+  username!: string;
+
+  @Field(() => String)
+  password!: string;
+
 }
 
 @ArgsType()

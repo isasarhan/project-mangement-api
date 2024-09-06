@@ -1,4 +1,4 @@
-import { IUser } from "../../interfaces/index.js";
+import { ICustomer, IUser } from "../../interfaces/index.js";
 import User from "../models/User.js";
 
 
@@ -9,6 +9,14 @@ class UserRepository {
         return await user.save()
     }
 
+    async addCustomer(id: string, customer: ICustomer) {
+        const user = await User.findById(id)
+        if (!user) {
+            throw new Error('User not found');
+          }
+        return await user.addCustomer(customer)
+    }
+    
     async update(id: string, data: Partial<IUser>) {
         return await User.findByIdAndUpdate(id, { $set: data }, { new: true })
     }
@@ -18,7 +26,11 @@ class UserRepository {
     }
 
     async getById(id: string) {
-        return await User.findById(id).select("-password")
+        return await User.findById(id)
+    }
+
+    async getByEmail(email: string) {
+        return await User.findOne({ email })
     }
 
     async getAll() {
