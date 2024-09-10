@@ -1,4 +1,3 @@
-import { GraphQLError } from 'graphql';
 import { BoardService } from '../../services/boardService.js'; // Adjust the path as needed
 import { Args, Mutation, Query, Resolver } from 'type-graphql';
 import { Service } from 'typedi';

@@ -1,24 +1,24 @@
-import { ObjectType, Field, ID, ArgsType, GraphQLISODateTime } from 'type-graphql';
-import { IsMongoId } from 'class-validator';
-import { Customer } from './customerTypeDefs.js';
+import { ObjectType, Field, ID, ArgsType, GraphQLISODateTime } from 'type-graphql'
+import { IsMongoId } from 'class-validator'
+import { Customer } from './customerTypeDefs.js'
 
 
 @ObjectType()
 export class User {
   @Field(() => ID)
-  _id!: string;
+  _id!: string
 
   @Field(() => String)
-  email!: string;
+  email!: string
 
   @Field(() => String)
-  username!: string;
+  username!: string
 
   @Field(() => String)
-  password!: string;
+  password!: string
 
   @Field(() => GraphQLISODateTime, { nullable: true })
-  createdAt?: Date;
+  createdAt?: Date
 
   @Field(() => [Customer])
   customers?: Customer[]
@@ -29,41 +29,41 @@ export class LoginUser {
   user!: User
 
   @Field(() => String)
-  token!: string;
+  token!: string
 }
 @ArgsType()
 export class EditUserArgs {
   @Field(() => ID)
-  _id!: string;
+  _id!: string
 
   @Field(() => String, { nullable: true })
-  email?: string;
+  email?: string
 
   @Field(() => String, { nullable: true })
-  username?: string;
+  username?: string
 
   @Field(() => String, { nullable: true })
-  password!: string;
+  password!: string
 
   @Field(() => GraphQLISODateTime, { nullable: true }) // Updated type
-  createdAt?: Date;
+  createdAt?: Date
 }
 
 @ArgsType()
 export class AddUserArgs {
   @Field(() => String)
-  email!: string;
+  email!: string
 
   @Field(() => String)
-  username!: string;
+  username!: string
 
   @Field(() => String)
-  password!: string;
+  password!: string
 
   @Field(() => GraphQLISODateTime, { nullable: true }) // Updated type
-  createdAt?: Date;
+  createdAt?: Date
 
-  @Field(() => [ID])
+  @Field(() => [ID], {nullable:true})
   @IsMongoId()
   customers?: [string]
 
@@ -73,18 +73,32 @@ export class AddUserArgs {
 export class GetUserArgs {
   @Field(() => ID)
   @IsMongoId()
-  _id!: string;
+  _id!: string
 }
+@ArgsType()
+export class RequestPasswordResetArgs {
+  @Field(() => String)
+  email!: string
+}
+@ArgsType()
+export class PasswordResetArgs {
+  @Field(() => String)
+  newPassword!: string
+  
+  @Field(() => String)
+  token!: string
+}
+
 @ArgsType()
 export class LoginUserArgs {
   @Field(() => String)
-  email!: string;
+  email!: string
 
   @Field(() => String, { nullable: true })
-  username!: string;
+  username!: string
 
   @Field(() => String)
-  password!: string;
+  password!: string
 
 }
 

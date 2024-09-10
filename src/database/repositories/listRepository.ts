@@ -7,7 +7,7 @@ class ListRepository {
   async create(data: IList) {
     const board = new List(data);
     return board.save();
-  }
+  } 
 
   async getById(id: string) {
     return List.findById(id).populate('lists').populate('users')
@@ -23,6 +23,22 @@ class ListRepository {
 
   async delete(id: string) {
     return List.findByIdAndDelete(id).populate('lists').populate('users')
+  }
+
+  async removeCard(listId: string, cardId: string) {
+    const list = await List.findById(listId)
+    if (!list) {
+      throw new Error("list not found!");
+    }
+    return await list.removeCard(cardId)
+  }
+
+  async addCard(listId: string, cardId: string) {
+    const list = await List.findById(listId)
+    if (!list) {
+      throw new Error("list not found!");
+    }
+    return await list.addCard(cardId)
   }
 }
 

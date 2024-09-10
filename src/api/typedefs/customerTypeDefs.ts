@@ -9,7 +9,7 @@ export class Customer implements ICustomer {
   _id?: string;
 
   @Length(3)
-  @Field(() => String)
+  @Field(() => String) 
   name!: string;
 
   @Field({ nullable: true })

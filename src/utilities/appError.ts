@@ -1,25 +1,34 @@
 import { GraphQLError } from 'graphql';
+import { UNAUTHORIZED } from './messages.js';
 
 interface AppErrorOptions {
   message: string;
   code?: string;
-  extensions?: Record<string, any>;
-  originalError?: Error; 
+  status?: number;
+  originalError?: Error;
 }
 
 export class AppError extends GraphQLError {
-  constructor({ message, code, extensions, originalError }: AppErrorOptions) {
-    // Create a detailed error message including the original error stack trace if provided
+  constructor({ message, code, originalError, status }: AppErrorOptions) {
     const errorExtensions = {
       code: code || 'INTERNAL_SERVER_ERROR',
-      ...extensions,
-      originalErrorStack: originalError ? originalError.stack : undefined, // Store stack trace in extensions
+      http: {
+        status: status
+      },
+      originalErrorStack: originalError ? originalError.stack : undefined,
     };
 
     super(message, { extensions: errorExtensions });
+
+    console.error(originalError);
   }
 }
 
+export class AuthenticationError extends AppError {
+  constructor(error: Error) {
+    super({ message: UNAUTHORIZED, code: ErrorCodes.UNAUTHORIZED, originalError: error, status: STATUS_CODES.UN_AUTHORISED })
+  }
+}
 
 export function isAppError(error: any) {
   if (error instanceof AppError) {
@@ -34,7 +43,6 @@ export const STATUS_CODES = {
   NOT_FOUND: 404,
   INTERNAL_ERROR: 500,
 };
-
 
 export const ErrorCodes = {
   INTERNAL_SERVER_ERROR: 'INTERNAL_SERVER_ERROR',

@@ -1,9 +1,8 @@
-import { Schema, model } from 'mongoose';
+import { ObjectId, Schema, model } from 'mongoose';
 import { ICustomer } from '../../interfaces/index.js';
 
-
-interface ICustomerDocument extends ICustomer, Document {
-    user: Schema.Types.ObjectId;
+export interface ICustomerDocument extends ICustomer, Document {
+    user:ObjectId
 }
   
 const CustomerSchema = new Schema<ICustomerDocument>({

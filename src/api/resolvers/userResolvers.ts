@@ -1,8 +1,8 @@
-import { Service } from 'typedi';
-import { UserService } from '../../services/userService.js';
-import { Args, Ctx, Mutation, Query, Resolver } from 'type-graphql';
-import { AddUserArgs, DeleteUserArgs, EditUserArgs, GetUserArgs, LoginUser, LoginUserArgs, User } from '../typedefs/userTypeDefs.js';
-import { authCheck, MyContext } from '../../app.js';
+import { Service } from 'typedi'
+import { UserService } from '../../services/userService.js'
+import { Args, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { AddUserArgs, DeleteUserArgs, EditUserArgs, GetUserArgs, LoginUser, LoginUserArgs, PasswordResetArgs, RequestPasswordResetArgs, User } from '../typedefs/userTypeDefs.js'
+import { authCheck, MyContext } from '../../app.js'
 
 @Service()
 @Resolver(() => User)
@@ -39,6 +39,22 @@ export class UserResolver {
     @Mutation(() => User)
     async deleteUser(@Args() { _id }: DeleteUserArgs) {
         return await this.service.deleteUser(_id)
+    }
+
+    @Mutation(() => String)
+    async requestPasswordReset(@Args() { email }: RequestPasswordResetArgs) {
+        const result = await this.service.requestPasswordReset(email)
+        if (result)
+            return 'email sent successfully'
+        else return 'failed to send email'
+    }
+
+    @Mutation(() => String)
+    async passwordReset(@Args() { newPassword, token }: PasswordResetArgs) {
+        const result = await this.service.resetPassword(newPassword, token)
+        if (result)
+            return 'password reset successfully'
+        else return 'failed to reset password'
     }
 }
 

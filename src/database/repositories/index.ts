@@ -20,5 +20,3 @@ type CardRepoType = typeof CardRepository;
 export {
     BoardRepoType, ListRepoType, CustomerRepoType, CardRepoType
 }
-
-

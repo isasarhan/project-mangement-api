@@ -12,7 +12,7 @@ export interface IBoard {
 }
 export enum TaskStatus {
   Complete = "complete",
-  Finished = "finished",
+  Delivered = "delivered",
   OnHold = "onHold",
   Discarded = "discarded",
 }

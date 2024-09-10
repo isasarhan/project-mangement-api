@@ -10,7 +10,6 @@ const port  = process.env.PORT || 4000
 
 connectToMongoose(process.env.db).then(()=>{
     httpServer.listen(port).on('listening', ()=>{
-        console.log(`listening to port ${port}...`);
-        
+        console.log(`listening to port ${port}...`);  
     })
 })

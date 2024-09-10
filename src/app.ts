@@ -12,6 +12,8 @@ import { ListResolver } from './api/resolvers/listResolvers.js';
 import { CardResolver } from './api/resolvers/cardResolvers.js';
 import jwt from 'jsonwebtoken';
 import { User } from './api/typedefs/userTypeDefs.js';
+import { AppError, ErrorCodes, STATUS_CODES } from './utilities/appError.js';
+import { UNAUTHORIZED } from './utilities/messages.js';
 
 dotenv.config();
 
@@ -25,7 +27,7 @@ const app = express();
 export const authCheck = (ctx: MyContext) => {
     const user = ctx.user;
     if (!user) {
-        throw new Error("Auth Error")
+        throw new AppError({ message: UNAUTHORIZED, code: ErrorCodes.UNAUTHORIZED, status: STATUS_CODES.UN_AUTHORISED })
     }
 }
 

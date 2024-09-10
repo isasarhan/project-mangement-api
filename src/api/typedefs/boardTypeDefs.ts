@@ -8,21 +8,20 @@ export class Board {
 
     @Field(() => String)
     @IsMongoId()
-    _id!: string
+    _id!: string;
 
     @Field(() => String)
     title!: string;
 
-    @Field(() => [List])
-    lists?: List[]
+    @Field(() => [List], { nullable: true })
+    lists?: List[];
 
-    @Field(() => [User])
-    users?: User[]
+    @Field(() => [User], { nullable: true })
+    users?: User[];
 
-    @Field(() => GraphQLISODateTime)
-    createdAt?: Date
+    @Field(() => GraphQLISODateTime, { nullable: true })
+    createdAt?: Date;
 }
-
 
 @ArgsType()
 export class AddBoardArgs{
